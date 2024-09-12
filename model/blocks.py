@@ -87,7 +87,7 @@ class MultiLayerPerceptron(nn.Module):
 class TransformerBlock(nn.Module):
     """
     A single transformer block that consists of multi-head attention and an MLP,
-    both with skip connections and layer normalization.
+    both with skip connections and layer normalisation.
     """
     def __init__(self, config):
         super().__init__()
@@ -107,7 +107,7 @@ class TransformerBlock(nn.Module):
         # add skip connection
         x = x + attention_output  # Add skip connection
 
-        # layer normalization and MLP block
+        # layer normalisation and MLP block
         mlp_output = self.mlp(self.layernorm_2(x))
 
         # add skip connection

@@ -47,7 +47,7 @@ class PositionEmbeddings(nn.Module):
         # positional embeddings to retain positional information
         self.position_embeddings = nn.Parameter(torch.randn(1, self.patch_embeddings.num_patches + 1,
                                                             config["hidden_size"]))
-        # dropout for regularization
+        # dropout for regularisation
         self.dropout = nn.Dropout(config["hidden_dropout_prob"])
 
     def forward(self, x):

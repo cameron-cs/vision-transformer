@@ -162,7 +162,7 @@ class PositionEmbeddings(nn.Module):
         # positional embeddings to retain positional information
         self.position_embeddings = nn.Parameter(torch.randn(1, self.patch_embeddings.num_patches + 1,
                                                             config["hidden_size"]))
-        # dropout for regularization
+        # dropout for regularisation
         self.dropout = nn.Dropout(config["hidden_dropout_prob"])
 
     def forward(self, x):
@@ -187,11 +187,36 @@ class PositionEmbeddings(nn.Module):
 
 ![Transformer encoder](paper/arch_encoder.png)
 
-The encoder consists of alternating layers of multi-head self-attention and MLP blocks. Each layer is followed by **Layer Normalization** and **Residual Connections**.
+The encoder consists of alternating layers of multi-head self-attention and MLP blocks. Each layer is followed by **Layer Normalisation** and **Residual Connections**.
 
 The operations in a transformer encoder block are:
 
 z' = MultiHeadSelfAttention(LayerNorm(z)) + z z = MLP(LayerNorm(z')) + z'
+
+```python
+class Encoder(nn.Module):
+    """
+    The transformer encoder consisting of multiple blocks, each containing multi-head
+    attention and MLP blocks.
+    """
+    def __init__(self, config):
+        super().__init__()
+        # stack of transformer blocks
+        self.blocks = nn.ModuleList([TransformerBlock(config) for _ in range(config["num_hidden_layers"])])
+
+    def forward(self, x, output_attentions=False):
+        all_attentions = []
+        # pass through each transformer block
+        for block in self.blocks:
+            x, attention_probs = block(x, output_attentions=output_attentions)
+
+            # store attention probabilities if needed
+            if output_attentions:
+                all_attentions.append(attention_probs)
+
+        # final output and attentions if required
+        return (x, all_attentions) if output_attentions else (x, None)
+```
 
 ### 6. **Classification Head**
 The final layer of the transformer model takes the [CLS] token output from the transformer and maps it to the number of output classes using a simple linear layer.
