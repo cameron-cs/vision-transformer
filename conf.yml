@@ -1,0 +1,25 @@
+model:
+  patch_size: 4
+  hidden_size: 64
+  num_hidden_layers: 4
+  num_attention_heads: 4
+  intermediate_size: 4 * 64
+  hidden_dropout_prob: 0.1
+  attention_probs_dropout_prob: 0.1
+  initializer_range: 0.02
+  image_size: 32
+  num_classes: 10
+  num_channels: 3
+  qkv_bias: True
+
+
+training:
+  epochs: 100
+  batch_size: 256
+  learning_rate: 0.001
+  weight_decay: 1e-4,
+  save_model_every: 20
+  early_stopping_patience: 50
+  optimiser: 'AdamW'
+  scheduler: 'CosineAnnealingLR'
+  loss_fn: 'CrossEntropyLoss'
